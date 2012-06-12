@@ -27,7 +27,7 @@ do
         ENDPOINT=${OPTARG}
         ;;
     *)
-	echo "Syntax: $(basename $0) -u USER -p KEYSTONE -t TENANT -C CONTROLLER_IP"
+	echo "Syntax: $(basename $0) -u USER -p PASSWORD -t TENANT -C CONTROLLER_IP"
 	exit 1
 	;;
   esac

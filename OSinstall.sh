@@ -90,7 +90,7 @@ cat > /etc/nova/nova.conf << EOF
 --verbose
 --connection_type=libvirt
 --libvirt_type=${VIRT}
---libvirt_use_virtio_for_bridges
+#--libvirt_use_virtio_for_bridges
 --sql_connection=mysql://nova:${MYSQL_PASS}@${MYSQL_ADDR}/nova
 --s3_host=${CC_ADDR}
 --s3_dmz=${CC_ADDR}
