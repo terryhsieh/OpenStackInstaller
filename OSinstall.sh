@@ -156,7 +156,7 @@ mysql-server-5.1 mysql-server/root_password password $MYSQL_PASS
 mysql-server-5.1 mysql-server/root_password_again password $MYSQL_PASS
 mysql-server-5.1 mysql-server/start_on_boot boolean true
 MYSQL_PRESEED
-	apt-get install -y mysql-server 2>&1 >> ${LOGFILE}
+	apt-get install -y --force-yes mysql-server 2>&1 >> ${LOGFILE}
 	sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/my.cnf
 	service mysql restart
 
@@ -533,7 +533,7 @@ echo "Setting up repos and installing software"
 # For Essex, this is part of Ubuntu 12.04
 if [ $(lsb_release -r | awk '{print $2}') != "12.04" ]
 then
-	apt-get install -y python-software-properties 2>&1 >> ${LOGFILE}
+	apt-get install -y --force-yes python-software-properties 2>&1 >> ${LOGFILE}
 	echo "Not running Ubuntu Precise Pangolin 12.04, add Essex Trunk PPA" >> ${LOGFILE}
 	add-apt-repository ppa:openstack-core/trunk 2>&1 >> ${LOGFILE}
 fi
@@ -542,12 +542,12 @@ apt-get update 2>&1 >> ${LOGFILE}
 # Install based on type
 if [ ! -z ${RABBITMQ_INSTALL} ]
 then
-	apt-get install -y rabbitmq-server 2>&1 >> ${LOGFILE}
+	apt-get install -y --force-yes rabbitmq-server 2>&1 >> ${LOGFILE}
 fi
 
 
 
-apt-get install -y ${NOVA_PACKAGES} ${EXTRA_PACKAGES} 2>&1 >> ${LOGFILE}
+apt-get install -y --force-yes ${NOVA_PACKAGES} ${EXTRA_PACKAGES} 2>&1 >> ${LOGFILE}
 
 
 # Configure Nova Conf
