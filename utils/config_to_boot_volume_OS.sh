@@ -2,19 +2,19 @@
 #set upstart config to make each service do not start at machine boot up 
 for i in nova-api.conf nova-cert.conf nova-compute.conf nova-consoleauth.conf nova-console.conf nova-network.conf nova-objectstore.conf nova-scheduler.conf keystone.conf glance-api.conf glance-registry.conf
 do
-	sed -i "s/start on (filesystem and net-device-up IFACE!=lo)/#start on (filesystem and net-device-up IFACE!=lo)/g" /etc/init/$i
+	sed -i "s/^start on (filesystem and net-device-up IFACE!=lo)/#start on (filesystem and net-device-up IFACE!=lo)/g" /etc/init/$i
 done
 
 #because PDCM make all module into kernel, so we need to disable modprobe commant
 for j in nova-compute.conf
 do
-	sed -i "s/modprobe nbd/#modprobe nbd/g" /etc/init/$j
+	sed -i "s/^modprobe nbd/#modprobe nbd/g" /etc/init/$j
 done
 
 
 for k in mysql.conf
 do
-	sed -i "s/start on runlevel \[2345\]/#start on runlevel \[2345\]/g" /etc/init/$k
+	sed -i "s/^start on runlevel \[2345\]/#start on runlevel \[2345\]/g" /etc/init/$k
 done
 
 #make service that using traditional init start procedule do not start at machine boot up 
