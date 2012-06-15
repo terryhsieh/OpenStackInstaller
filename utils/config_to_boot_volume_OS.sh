@@ -14,7 +14,7 @@ done
 
 for k in mysql.conf
 do
-	sed -i "s/start on runlevel [2345]/#start on runlevel [2345]/g" /etc/init/$k
+	sed -i "s/start on runlevel \[2345\]/#start on runlevel \[2345\]/g" /etc/init/$k
 done
 
 #make service that using traditional init start procedule do not start at machine boot up 
