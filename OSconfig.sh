@@ -159,7 +159,13 @@ MYSQL_PRESEED
 	apt-get install -y --force-yes mysql-server 2>&1 >> ${LOGFILE}
 	sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/my.cnf
 	service mysql restart
-
+	
+	# Drop Database if exist
+	for C in nova glance keystone
+	do
+		mysql -uroot -p$MYSQL_PASS -e "drop database if exist $C;"
+	done
+	
 	# Create Databases
 	for D in nova glance keystone
 	do
@@ -171,6 +177,13 @@ MYSQL_PRESEED
 
 remote_mysql_install() {
 	apt-get -y install mysql-client
+
+	# Drop Database if exist
+        for C in nova glance keystone
+        do
+                mysql -uroot -p$MYSQL_PASS -e "drop database if exist $C;"
+        done
+
 	# Create Databases
 	for D in nova glance keystone
 	do
