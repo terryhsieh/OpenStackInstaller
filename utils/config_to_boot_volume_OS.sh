@@ -8,7 +8,7 @@ done
 #because PDCM make all module into kernel, so we need to disable modprobe commant
 for j in nova-compute.conf
 do
-	sed -i "s/^modprobe nbd/#modprobe nbd/g" /etc/init/$j
+	sed -i "s/^\tmodprobe nbd/\t#modprobe nbd/g" /etc/init/$j
 done
 
 
