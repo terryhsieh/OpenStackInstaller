@@ -1,0 +1,24 @@
+NOVA_API_HOST=192.168.220.100
+GLANCE_API_HOST=192.168.220.100
+KEYSTONE_API_HOST=192.168.220.100
+
+NOVA_REGION="nova"
+
+export NOVA_USERNAME=demo
+export NOVA_PROJECT_ID=demo
+export NOVA_PASSWORD=openstack
+export NOVA_API_KEY=openstack
+export NOVA_REGION_NAME=$NOVA_REGION
+export NOVA_URL="http://$NOVA_API_HOST:5000/v2.0/"
+export NOVA_VERSION="1.1"
+
+export OS_USERNAME=demo
+export OS_PASSWORD=openstack
+export OS_TENANT_ID=2ef6fd2692834a7e9287bc043e06bfc4
+export OS_AUTH_URL="http://$KEYSTONE_API_HOST:5000/v2.0/"
+export OS_AUTH_STRATEGY="keystone"
+
+export EC2_URL="http://$NOVA_API_HOST:8773/services/Cloud"
+export EC2_ACCESS_KEY="fcd5076715684e33aab2cf981771ba06"
+export EC2_SECRET_KEY="38f9982af0f84c73afa83f19b2c75bf6"
+export S3_URL="http://$GLANCE_API_HOST:3333"
