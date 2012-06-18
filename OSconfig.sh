@@ -634,13 +634,6 @@ then
 	start glance-registry 2>&1 >> ${LOGFILE}
 fi
 
-'''
-for P in $(ls /etc/init/nova* | cut -d'/' -f4 | cut -d'.' -f1)
-do
-	stop ${P} 2>&1 >> ${LOGFILE}
-	start ${P} 2>&1 >> ${LOGFILE}
-done
-'''
 case ${INSTALL} in
         "all"|"single")
                 # Start the service correspond to the role assigned
