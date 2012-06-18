@@ -5,7 +5,7 @@
 
 # Author K. Jackson
 
-# ./create_novarc -u admin -p openstack -t admin -C $CC_ADDR
+# ./create_novarc -u admin -p openstack -t demo -C $CC_ADDR
 
 
 # Process Command Line
