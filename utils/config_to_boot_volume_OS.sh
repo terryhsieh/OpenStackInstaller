@@ -1,6 +1,6 @@
 
 #set upstart config to make each service do not start at machine boot up 
-for i in nova-api.conf nova-cert.conf nova-compute.conf nova-consoleauth.conf nova-console.conf nova-network.conf nova-objectstore.conf nova-scheduler.conf keystone.conf glance-api.conf glance-registry.conf
+for i in nova-api.conf nova-cert.conf nova-compute.conf nova-consoleauth.conf nova-console.conf nova-network.conf nova-objectstore.conf nova-scheduler.conf
 do
 	sed -i "s/^start on (filesystem and net-device-up IFACE!=lo)/#start on (filesystem and net-device-up IFACE!=lo)/g" /etc/init/$i
 done
@@ -34,4 +34,5 @@ do
 	done
 done
 
-
+#   make StrictHostKeyChecking ask to no
+sed -i "s/^#   StrictHostKeyChecking ask/StrictHostKeyChecking no/g" /etc/ssh/ssh_config

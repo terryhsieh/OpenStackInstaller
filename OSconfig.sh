@@ -219,12 +219,12 @@ glance_install() {
 	mkdir -p /etc/glance
 	cp $TMPAREA/* /etc/glance
 
-	stop glance-registry
+#	stop glance-registry
 
 	glance-manage version_control 0
 	glance-manage db_sync
 
-	start glance-registry
+#	start glance-registry
 }
 
 keystone_install() {
@@ -346,7 +346,7 @@ do
 	LOCAL_MYSQL_INSTALL=0
 	;;
     y)
-	AUTO=0
+	AUTO=1
 	;;
     h)
 	usage
@@ -488,17 +488,6 @@ OpenStack will be installed with these options:
 	Role: Member, Admin
     Credentials: User ${ADMIN} / Pass openstack
 CONFIG
-
-if [ -z ${AUTO} ]
-then
-	echo "Are you sure you want to continue? [Y/n]"
-	read YESNO
-	if [ "${YESNO}" = "n" ]
-	then
-		echo "Aborting!"
-		exit 1
-	fi
-fi
 
 # Libc6 Presents an interactive session question - override
 cat <<LIBC6_PRESEED | debconf-set-selections
