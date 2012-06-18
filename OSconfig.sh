@@ -105,7 +105,7 @@ cat > /etc/nova/nova.conf << EOF
 --num_networks=${NUM_NETWORKS}
 --FAKE_subdomain=ec2
 --public_interface=${PUBLIC_INTERFACE}
---auto_assign_floating_ip
+#--auto_assign_floating_ip
 --state_path=/var/lib/nova
 --lock_path=/var/lock/nova
 --image_service=nova.image.glance.GlanceImageService
@@ -346,7 +346,7 @@ do
 	LOCAL_MYSQL_INSTALL=0
 	;;
     y)
-	AUTO=1
+	AUTO=0
 	;;
     h)
 	usage
@@ -761,7 +761,7 @@ esac
 case ${INSTALL} in
 	"compute"|"node")
 	HOST=$(hostname -s)
-	MYIP=$(/sbin/ifconfig eth0 | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
+	MYIP=$(/sbin/ifconfig eth1 | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
 cat << INSTRUCTIONS
 Ensure that the following is in DNS or in /etc/hosts
 
