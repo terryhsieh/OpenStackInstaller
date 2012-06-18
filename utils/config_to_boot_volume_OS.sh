@@ -5,6 +5,11 @@ do
 	sed -i "s/^start on (filesystem and net-device-up IFACE!=lo)/#start on (filesystem and net-device-up IFACE!=lo)/g" /etc/init/$i
 done
 
+for i in keystone.conf glance-api.conf glance-registry.conf
+do
+        sed -i "s/^start on (local-filesystems and net-device-up IFACE!=lo)/#start on (local-filesystems and net-device-up IFACE!=lo)/g" /etc/init/$i
+done
+
 #because PDCM make all module into kernel, so we need to disable modprobe commant
 for j in nova-compute.conf
 do
