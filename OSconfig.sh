@@ -79,6 +79,8 @@ mask2cidr() {
 
 configure_nova() {
 
+my_ip=$(/sbin/ifconfig eth1 | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
+
 # Configure the /etc/nova/nova.conf file
 cat > /etc/nova/nova.conf << EOF
 --daemonize=1
@@ -130,6 +132,7 @@ cat > /etc/nova/nova.conf << EOF
 --novncproxy_base_url=http://${CC_ADDR}:6080/vnc_auto.html
 --vncserver_proxyclient_address=${CC_ADDR}
 --vncserver_listen=${CC_ADDR}
+--my_ip=${my_ip}
 EOF
 
 cat > /etc/nova/nova-compute.conf << EOF
@@ -163,7 +166,7 @@ MYSQL_PRESEED
 	# Drop Database if exist
 	for C in nova glance keystone
 	do
-		mysql -uroot -p$MYSQL_PASS -e "drop database if exist $C;"
+		mysql -uroot -p$MYSQL_PASS -e "drop database if exists $C;"
 	done
 	
 	# Create Databases
@@ -181,7 +184,7 @@ remote_mysql_install() {
 	# Drop Database if exist
         for C in nova glance keystone
         do
-                mysql -uroot -p$MYSQL_PASS -e "drop database if exist $C;"
+                mysql -uroot -p$MYSQL_PASS -e "drop database if exists $C;"
         done
 
 	# Create Databases
@@ -642,13 +645,117 @@ then
 	start glance-registry 2>&1 >> ${LOGFILE}
 fi
 
+'''
 for P in $(ls /etc/init/nova* | cut -d'/' -f4 | cut -d'.' -f1)
 do
 	stop ${P} 2>&1 >> ${LOGFILE}
 	start ${P} 2>&1 >> ${LOGFILE}
 done
+'''
+case ${INSTALL} in
+        "all"|"single")
+                # Start the service correspond to the role assigned
+		service glance-registry         stop 2>&1 >> ${LOGFILE}
+		service glance-api              stop 2>&1 >> ${LOGFILE}
 
+		service nova-compute            stop 2>&1 >> ${LOGFILE}
+		service nova-network            stop 2>&1 >> ${LOGFILE}
+		service nova-scheduler          stop 2>&1 >> ${LOGFILE}
+		service nova-objectstore        stop 2>&1 >> ${LOGFILE}
+		service nova-console            stop 2>&1 >> ${LOGFILE}
+		service nova-consoleauth        stop 2>&1 >> ${LOGFILE}
+		service nova-cert               stop 2>&1 >> ${LOGFILE}
+		service nova-api                stop 2>&1 >> ${LOGFILE}
+		service libvirt-bin             stop 2>&1 >> ${LOGFILE}
 
+		service keystone                stop 2>&1 >> ${LOGFILE}
+
+		service novnc                   stop 2>&1 >> ${LOGFILE}
+		service memcached               stop 2>&1 >> ${LOGFILE}
+		service apache2                 stop 2>&1 >> ${LOGFILE}
+		service rabbitmq-server         stop 2>&1 >> ${LOGFILE}
+		service mysql                   stop 2>&1 >> ${LOGFILE}
+
+#-------------------------------------------------------
+		service mysql                   start 2>&1 >> ${LOGFILE}
+		service rabbitmq-server         start 2>&1 >> ${LOGFILE}
+		service apache2                 start 2>&1 >> ${LOGFILE}
+		service memcached               start 2>&1 >> ${LOGFILE}
+		service novnc                   start 2>&1 >> ${LOGFILE}
+
+		service keystone                start 2>&1 >> ${LOGFILE}
+
+		service nova-api                start 2>&1 >> ${LOGFILE}
+		service nova-cert               start 2>&1 >> ${LOGFILE}
+		service nova-consoleauth        start 2>&1 >> ${LOGFILE}
+		service nova-console            start 2>&1 >> ${LOGFILE}
+		service nova-objectstore        start 2>&1 >> ${LOGFILE}
+		service nova-scheduler          start 2>&1 >> ${LOGFILE}
+		service nova-network            start 2>&1 >> ${LOGFILE}
+		service nova-compute            start 2>&1 >> ${LOGFILE}
+		service libvirt-bin             start 2>&1 >> ${LOGFILE}
+
+		service glance-api              start 2>&1 >> ${LOGFILE}
+		service glance-registry         start 2>&1 >> ${LOGFILE}
+                ;;
+        "controller")
+		 # Start the service correspond to the role assigned
+                service glance-registry         stop 2>&1 >> ${LOGFILE}
+                service glance-api              stop 2>&1 >> ${LOGFILE}
+
+                service nova-compute            stop 2>&1 >> ${LOGFILE}
+                service nova-network            stop 2>&1 >> ${LOGFILE}
+                service nova-scheduler          stop 2>&1 >> ${LOGFILE}
+                service nova-objectstore        stop 2>&1 >> ${LOGFILE}
+                service nova-console            stop 2>&1 >> ${LOGFILE}
+                service nova-consoleauth        stop 2>&1 >> ${LOGFILE}
+                service nova-cert               stop 2>&1 >> ${LOGFILE}
+                service nova-api                stop 2>&1 >> ${LOGFILE}
+                service libvirt-bin             stop 2>&1 >> ${LOGFILE}
+
+                service keystone                stop 2>&1 >> ${LOGFILE}
+
+                service novnc                   stop 2>&1 >> ${LOGFILE}
+                service memcached               stop 2>&1 >> ${LOGFILE}
+                service apache2                 stop 2>&1 >> ${LOGFILE}
+                service rabbitmq-server         stop 2>&1 >> ${LOGFILE}
+                service mysql                   stop 2>&1 >> ${LOGFILE}
+
+#-------------------------------------------------------
+                service mysql                   start 2>&1 >> ${LOGFILE}
+                service rabbitmq-server         start 2>&1 >> ${LOGFILE}
+                service apache2                 start 2>&1 >> ${LOGFILE}
+                service memcached               start 2>&1 >> ${LOGFILE}
+                service novnc                   start 2>&1 >> ${LOGFILE}
+
+                service keystone                start 2>&1 >> ${LOGFILE}
+
+                service nova-api                start 2>&1 >> ${LOGFILE}
+                service nova-cert               start 2>&1 >> ${LOGFILE}
+                service nova-consoleauth        start 2>&1 >> ${LOGFILE}
+                service nova-console            start 2>&1 >> ${LOGFILE}
+                service nova-objectstore        start 2>&1 >> ${LOGFILE}
+                service nova-scheduler          start 2>&1 >> ${LOGFILE}
+                service nova-network            start 2>&1 >> ${LOGFILE}
+                service nova-compute            start 2>&1 >> ${LOGFILE}
+                service libvirt-bin             start 2>&1 >> ${LOGFILE}
+
+                service glance-api              start 2>&1 >> ${LOGFILE}
+                service glance-registry         start 2>&1 >> ${LOGFILE}
+                ;;
+        "compute"|"node")
+		
+		service nova-compute            stop 2>&1 >> ${LOGFILE}
+                service nova-network            stop 2>&1 >> ${LOGFILE}
+		service libvirt-bin             stop 2>&1 >> ${LOGFILE}
+		service nova-api		stop 2>&1 >> ${LOGFILE}	
+		
+		service nova-api		start 2>&1 >> ${LOGFILE}
+		service libvirt-bin		start 2>&1 >> ${LOGFILE}
+		service nova-network		start 2>&1 >> ${LOGFILE}
+		service nova-compute		start 2>&1 >> ${LOGFILE}	
+                ;;
+esac
 
 # Instructions
 case ${INSTALL} in
