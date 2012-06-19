@@ -130,8 +130,8 @@ cat > /etc/nova/nova.conf << EOF
 --send_arp_for_ha
 --novnc_enabled=true
 --novncproxy_base_url=http://${CC_ADDR}:6080/vnc_auto.html
---vncserver_proxyclient_address=${CC_ADDR}
---vncserver_listen=${CC_ADDR}
+--vncserver_proxyclient_address=${my_ip}
+--vncserver_listen=${my_ip}
 --my_ip=${my_ip}
 EOF
 
