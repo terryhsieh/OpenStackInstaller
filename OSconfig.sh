@@ -34,7 +34,7 @@ fi
 usage() {
 cat << USAGE
 Syntax
-    OSinstall.sh -T {type} -s { network size } -n {number of networks} -p {public interface} -P {private interface} -f {floating_range} -F {fixed_range} -V {VLAN start} -C {Controller Address} -A {admin} -v {qemu | kvm} -t {default tenancy} -M {ip of MySQL service}
+    OSinstall.sh -T {type} -s { network size } -n {number of networks} -p {public interface} -P {private interface} -F {floating_range} -f {fixed_range} -V {VLAN start} -C {Controller Address} -A {admin} -v {qemu | kvm} -t {default tenancy} -M {ip of MySQL service}
 
     -T: Installation type: all (single node) | controller | compute (default all)
     -s: Network size (IP address range on this network) (default 64)
