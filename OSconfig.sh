@@ -704,6 +704,8 @@ case ${INSTALL} in
                 ;;
 esac
 
+#Ensure metadata server work property 
+kllall dnsmasq
 
 
 
