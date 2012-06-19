@@ -159,9 +159,10 @@ mysql-server-5.1 mysql-server/root_password password $MYSQL_PASS
 mysql-server-5.1 mysql-server/root_password_again password $MYSQL_PASS
 mysql-server-5.1 mysql-server/start_on_boot boolean true
 MYSQL_PRESEED
-	apt-get install -y --force-yes mysql-server 2>&1 >> ${LOGFILE}
+#	apt-get install -y --force-yes mysql-server 2>&1 >> ${LOGFILE}
 	sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/my.cnf
-	service mysql restart
+	service mysql stop	2>&1 >> ${LOGFILE}
+	service mysql start	2>&1 >> ${LOGFILE}
 	
 	# Drop Database if exist
 	for C in nova glance keystone
@@ -179,7 +180,6 @@ MYSQL_PRESEED
 }
 
 remote_mysql_install() {
-	apt-get -y install mysql-client
 
 	# Drop Database if exist
         for C in nova glance keystone
@@ -254,8 +254,8 @@ keystone_install() {
 	fi
 	cp $TMPAREA/keystone.conf /etc/keystone
 
-	stop keystone 
-	start keystone 
+	service keystone stop  2>&1 >> ${LOGFILE}
+	service keystone start 2>&1 >> ${LOGFILE} 
 
 	# Create roles, tenants and services
 	./keystone-services.sh $CC_ADDR $ADMIN $TENANCY
@@ -271,7 +271,8 @@ horizon_install() {
 	cp configs/local_settings.py /etc/openstack-dashboard/local_settings.py
 	mkdir -p /var/www/.novaclient
 	chown www-data /var/www/.novaclient
-	service apache2 restart
+	service apache2 stop	2>&1 >> ${LOGFILE}
+	service apache2 start	2>&1 >> ${LOGFILE}
 }
 
 LOGFILE=/var/log/nova/nova-install.log
@@ -535,28 +536,6 @@ esac
 # All installation types need to do the following
 echo "Setting up repos and installing software"
 
-
-
-# For Essex, this is part of Ubuntu 12.04
-if [ $(lsb_release -r | awk '{print $2}') != "12.04" ]
-then
-	apt-get install -y --force-yes python-software-properties 2>&1 >> ${LOGFILE}
-	echo "Not running Ubuntu Precise Pangolin 12.04, add Essex Trunk PPA" >> ${LOGFILE}
-	add-apt-repository ppa:openstack-core/trunk 2>&1 >> ${LOGFILE}
-fi
-#apt-get update 2>&1 >> ${LOGFILE}
-
-# Install based on type
-if [ ! -z ${RABBITMQ_INSTALL} ]
-then
-	apt-get install -y --force-yes rabbitmq-server 2>&1 >> ${LOGFILE}
-fi
-
-
-
-apt-get install -y --force-yes ${NOVA_PACKAGES} ${EXTRA_PACKAGES} 2>&1 >> ${LOGFILE}
-
-
 # Configure Nova Conf
 configure_nova
 
@@ -619,20 +598,6 @@ fi
 
 
 echo "Restarting service to finalize changes..."
-
-if [ ! -z ${KEYSTONE_INSTALL} ]
-then
-	stop keystone 2>&1 >> ${LOGFILE}
-	start keystone 2>&1 >> ${LOGFILE}
-fi
-
-if [ ! -z ${GLANCE_INSTALL} ]
-then
-	stop glance-api 2>&1 >> ${LOGFILE}
-	stop glance-registry 2>&1 >> ${LOGFILE}
-	start glance-api 2>&1 >> ${LOGFILE}
-	start glance-registry 2>&1 >> ${LOGFILE}
-fi
 
 case ${INSTALL} in
         "all"|"single")
@@ -738,6 +703,9 @@ case ${INSTALL} in
 		service nova-compute		start 2>&1 >> ${LOGFILE}	
                 ;;
 esac
+
+
+
 
 # Instructions
 case ${INSTALL} in
