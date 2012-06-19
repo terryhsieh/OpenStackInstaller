@@ -601,112 +601,52 @@ echo "Restarting service to finalize changes..."
 
 case ${INSTALL} in
         "all"|"single")
-                # Start the service correspond to the role assigned
-		service glance-registry         stop 2>&1 >> ${LOGFILE}
-		service glance-api              stop 2>&1 >> ${LOGFILE}
+		# Start the service correspond to the role assigned
+		for S in glance-registry glance-api libvirt-bin nova-compute nova-network nova-scheduler nova-objectstore nova-console nova-consoleauth nova-cert nova-api keystone novnc memcached apache2 rabbitmq-server mysql
+        	do
+                	service $S stop > /dev/null 2>&1 >> ${LOGFILE} 
+        	done
 
-		service nova-compute            stop 2>&1 >> ${LOGFILE}
-		service nova-network            stop 2>&1 >> ${LOGFILE}
-		service nova-scheduler          stop 2>&1 >> ${LOGFILE}
-		service nova-objectstore        stop 2>&1 >> ${LOGFILE}
-		service nova-console            stop 2>&1 >> ${LOGFILE}
-		service nova-consoleauth        stop 2>&1 >> ${LOGFILE}
-		service nova-cert               stop 2>&1 >> ${LOGFILE}
-		service nova-api                stop 2>&1 >> ${LOGFILE}
-		service libvirt-bin             stop 2>&1 >> ${LOGFILE}
-
-		service keystone                stop 2>&1 >> ${LOGFILE}
-
-		service novnc                   stop 2>&1 >> ${LOGFILE}
-		service memcached               stop 2>&1 >> ${LOGFILE}
-		service apache2                 stop 2>&1 >> ${LOGFILE}
-		service rabbitmq-server         stop 2>&1 >> ${LOGFILE}
-		service mysql                   stop 2>&1 >> ${LOGFILE}
-
-#-------------------------------------------------------
-		service mysql                   start 2>&1 >> ${LOGFILE}
-		service rabbitmq-server         start 2>&1 >> ${LOGFILE}
-		service apache2                 start 2>&1 >> ${LOGFILE}
-		service memcached               start 2>&1 >> ${LOGFILE}
-		service novnc                   start 2>&1 >> ${LOGFILE}
-
-		service keystone                start 2>&1 >> ${LOGFILE}
-
-		service nova-api                start 2>&1 >> ${LOGFILE}
-		service nova-cert               start 2>&1 >> ${LOGFILE}
-		service nova-consoleauth        start 2>&1 >> ${LOGFILE}
-		service nova-console            start 2>&1 >> ${LOGFILE}
-		service nova-objectstore        start 2>&1 >> ${LOGFILE}
-		service nova-scheduler          start 2>&1 >> ${LOGFILE}
-		service nova-network            start 2>&1 >> ${LOGFILE}
-		service nova-compute            start 2>&1 >> ${LOGFILE}
-		service libvirt-bin             start 2>&1 >> ${LOGFILE}
-
-		service glance-api              start 2>&1 >> ${LOGFILE}
-		service glance-registry         start 2>&1 >> ${LOGFILE}
+		
+		for S in mysql rabbitmq-server apache2 memcached novnc keystone nova-api nova-cert nova-consoleauth nova-console nova-objectstore nova-scheduler nova-network nova-compute libvirt-bin glance-api glance-registry
+                do
+                        service $S start 2>&1 >> ${LOGFILE}
+                done
                 ;;
         "controller")
-		 # Start the service correspond to the role assigned
-                service glance-registry         stop 2>&1 >> ${LOGFILE}
-                service glance-api              stop 2>&1 >> ${LOGFILE}
+		# Start the service correspond to the role assigned
+		for S in glance-registry glance-api libvirt-bin nova-compute nova-network nova-scheduler nova-objectstore nova-console nova-consoleauth nova-cert nova-api keystone novnc memcached apache2 rabbitmq-server mysql
+                do
+                        service $S stop > /dev/null 2>&1 >> ${LOGFILE}
+                done
 
-                service nova-compute            stop 2>&1 >> ${LOGFILE}
-                service nova-network            stop 2>&1 >> ${LOGFILE}
-                service nova-scheduler          stop 2>&1 >> ${LOGFILE}
-                service nova-objectstore        stop 2>&1 >> ${LOGFILE}
-                service nova-console            stop 2>&1 >> ${LOGFILE}
-                service nova-consoleauth        stop 2>&1 >> ${LOGFILE}
-                service nova-cert               stop 2>&1 >> ${LOGFILE}
-                service nova-api                stop 2>&1 >> ${LOGFILE}
-                service libvirt-bin             stop 2>&1 >> ${LOGFILE}
 
-                service keystone                stop 2>&1 >> ${LOGFILE}
-
-                service novnc                   stop 2>&1 >> ${LOGFILE}
-                service memcached               stop 2>&1 >> ${LOGFILE}
-                service apache2                 stop 2>&1 >> ${LOGFILE}
-                service rabbitmq-server         stop 2>&1 >> ${LOGFILE}
-                service mysql                   stop 2>&1 >> ${LOGFILE}
-
-#-------------------------------------------------------
-                service mysql                   start 2>&1 >> ${LOGFILE}
-                service rabbitmq-server         start 2>&1 >> ${LOGFILE}
-                service apache2                 start 2>&1 >> ${LOGFILE}
-                service memcached               start 2>&1 >> ${LOGFILE}
-                service novnc                   start 2>&1 >> ${LOGFILE}
-
-                service keystone                start 2>&1 >> ${LOGFILE}
-
-                service nova-api                start 2>&1 >> ${LOGFILE}
-                service nova-cert               start 2>&1 >> ${LOGFILE}
-                service nova-consoleauth        start 2>&1 >> ${LOGFILE}
-                service nova-console            start 2>&1 >> ${LOGFILE}
-                service nova-objectstore        start 2>&1 >> ${LOGFILE}
-                service nova-scheduler          start 2>&1 >> ${LOGFILE}
-                service nova-network            start 2>&1 >> ${LOGFILE}
-                service nova-compute            start 2>&1 >> ${LOGFILE}
-                service libvirt-bin             start 2>&1 >> ${LOGFILE}
-
-                service glance-api              start 2>&1 >> ${LOGFILE}
-                service glance-registry         start 2>&1 >> ${LOGFILE}
+                for S in mysql rabbitmq-server apache2 memcached novnc keystone nova-api nova-cert nova-consoleauth nova-console nova-objectstore nova-scheduler nova-network nova-compute libvirt-bin glance-api glance-registry
+                do
+                        service $S start 2>&1 >> ${LOGFILE}
+                done
                 ;;
         "compute"|"node")
-		
-		service nova-compute            stop 2>&1 >> ${LOGFILE}
-                service nova-network            stop 2>&1 >> ${LOGFILE}
-		service libvirt-bin             stop 2>&1 >> ${LOGFILE}
-		service nova-api		stop 2>&1 >> ${LOGFILE}	
-		
-		service nova-api		start 2>&1 >> ${LOGFILE}
-		service libvirt-bin		start 2>&1 >> ${LOGFILE}
-		service nova-network		start 2>&1 >> ${LOGFILE}
-		service nova-compute		start 2>&1 >> ${LOGFILE}	
+		# Start the service correspond to the role assigned		
+		for S in nova-compute nova-network nova-api libvirt-bin
+		do
+			service $S stop > /dev/null 2>&1 >> ${LOGFILE}
+		done
+
+		for S in nova-compute nova-network nova-api libvirt-bin
+                do
+                        service $S start 2>&1 >> ${LOGFILE}
+                done
                 ;;
 esac
 
 #Ensure metadata server work property 
 kllall dnsmasq
 
+#Make sure start from beginning
+rm -rf /var/lib/glance/*
+rm -rf /var/lib/nova/instances/*
+rm -rf /var/log/nova/*
 
 
 # Instructions
